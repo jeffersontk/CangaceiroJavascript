@@ -1,20 +1,19 @@
 class NegociacaoController {
-
     constructor() {
-
-
-        let $ = document.querySelector.bind(document);
-        this._inputData = $('#data');
-        this._inputQuantidade = $('#quantidade');
-        this._inputValor = $('#valor');
+        let $ = document.querySelector.bind(document)
+        this._inputData = $('#data')
+        this._inputQuantidade = $('#quantidade')
+        this._inputValor = $('#valor')
         this._negociacoes = new Negociacoes()
+        this._negociacoesView = new NegociacoesView('.negociacoes')
+        this._negociacoesView.update(this._negociacoes)
+
     }
 
     adiciona(event) {
-        event.preventDefault();
-
+        event.preventDefault()
         this._negociacoes.adiciona(this._criaNegociacao())
-
+        this._negociacoesView.update(this._negociacoes)
         this._limparFormulario()
     }
 
