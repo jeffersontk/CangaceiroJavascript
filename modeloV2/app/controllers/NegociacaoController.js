@@ -35,4 +35,13 @@ class NegociacaoController {
             parseFloat(this._inputValor.value)
         );
     }
+    apaga() {
+
+        this._negociacoes.esvaziar()
+        this._negociacoesView.update(this._negociacoes)
+
+        this._mensagem.texto = 'Negociação apagada com sucesso'
+        this._mensagemView.update(this._mensagem)
+
+    }
 }
