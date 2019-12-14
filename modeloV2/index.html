@@ -1,54 +1,73 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>Negociações</title>
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.css">
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.css" />
+  </head>
 
-</head>
-
-<body class="container">
-
+  <body class="container">
     <h1 class="text-center">Negociações</h1>
 
     <div id="mensagemView"></div>
 
     <form class="form">
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input type="date" id="data" class="form-control" required autofocus />
+      </div>
 
-        <div class="form-group">
-            <label for="data">Data</label>
-            <input type="date" id="data" class="form-control" required autofocus />
-        </div>
+      <div class="form-group">
+        <label for="quantidade">Quantidade</label>
+        <input
+          type="number"
+          min="1"
+          step="1"
+          id="quantidade"
+          class="form-control"
+          value="1"
+          required
+        />
+      </div>
 
-        <div class="form-group">
-            <label for="quantidade">Quantidade</label>
-            <input type="number" min="1" step="1" id="quantidade" class="form-control" value="1" required />
-        </div>
+      <div class="form-group">
+        <label for="valor">Valor</label>
+        <input
+          id="valor"
+          type="number"
+          class="form-control"
+          min="0.01"
+          step="0.01"
+          value="0.0"
+          required
+        />
+      </div>
 
-        <div class="form-group">
-            <label for="valor">Valor</label>
-            <input id="valor" type="number" class="form-control" min="0.01" step="0.01" value="0.0" required />
-        </div>
-
-        <button class="btn btn-primary" type="submit">Incluir</button>
+      <button class="btn btn-primary" type="submit">Incluir</button>
     </form>
 
     <div class="text-center">
-        <button id="botao-importa" class="btn btn-primary text-center" type="button">
-            Importar Negociações
-        </button>
-        <button id="botao-apaga" class="btn btn-primary text-center" type="button">
-            Apagar
-        </button>
+      <button
+        id="botao-importa"
+        class="btn btn-primary text-center"
+        type="button"
+      >
+        Importar Negociações
+      </button>
+      <button
+        id="botao-apaga"
+        class="btn btn-primary text-center"
+        type="button"
+      >
+        Apagar
+      </button>
     </div>
-    <br>
-    <br>
+    <br />
+    <br />
 
     <div id="negociacoes"></div>
-
     <script src="app/model/Negociacao.js"></script>
     <script src="app/controllers/NegociacaoController.js"></script>
     <script src="app/Util/converters/DateConverter.js"></script>
@@ -58,6 +77,18 @@
     <script src="app/model/Mensagem.js"></script>
     <script src="app/views/MensagemView.js"></script>
     <script src="app/app.js"></script>
-</body>
-
+    <script>
+      const negociacao = new Proxy(new Negociacao(new Date(), 2, 100), {
+        //sem ES6 get:function(...){}
+        get(target, prop, receiver) {
+          console.log(`a propriedade "${prop}" caiu na armadilha!`);
+          return target[prop];
+        }
+      });
+      negociacao._quantidade = 10;
+      negociacao._valor = 100;
+      console.log(negociacao.quantidade);
+      console.log(negociacao.valor);
+    </script>
+  </body>
 </html>
