@@ -1,50 +1,60 @@
 class NegociacaoController {
-    constructor() {
-        const $ = document.querySelector.bind(document)
-        this._inputData = $('#data')
-        this._inputQuantidade = $('#quantidade')
-        this._inputValor = $('#valor')
-        /*
-        this._negociacoes = new Negociacoes(model => {
-            console.log(this);
-            this._negociacoesView.update(model)
-        })
-        */
-        this._negociacoesView = new NegociacoesView('#negociacoes')
-        this._negociacoesView.update(this._negociacoes)
+  constructor() {
+    const $ = document.querySelector.bind(document);
+    this._inputData = $("#data");
+    this._inputQuantidade = $("#quantidade");
+    this._inputValor = $("#valor");
+    const self = this;
+    this._negociacoes = new Proxy(new Negociacoes(), {
+      get(target, prop, receiver) {
+        if (
+          typeof (
+            typeof [prop] == typeof Function &&
+            ["adiciona", "esvazia"].includes(prop)
+          )
+        ) {
+          return function() {
+            console.log(`"${prop}" disparou a armadilha`);
+            target[prop].apply(target, arguments);
+            // target é a instância real de Negociacoes
+            self._negociacoesView.update(target);
+          };
+        }
+      }
+    });
+    this._negociacoesView = new NegociacoesView("#negociacoes");
+    this._negociacoesView.update(this._negociacoes);
 
-        this._mensagem = new Mensagem()
-        this._mensagemView = new MensagemView('#mensagemView')
-        this._mensagemView.update(this._mensagem)
-    }
+    this._mensagem = new Mensagem();
+    this._mensagemView = new MensagemView("#mensagemView");
+    this._mensagemView.update(this._mensagem);
+  }
 
-    adiciona(event) {
-        event.preventDefault()
-        this._negociacoes.adiciona(this._criaNegociacao())
-        this._mensagem.texto = 'Negociação adicionada com sucesso'
-        this._mensagemView.update(this._mensagem)
-        this._limparFormulario()
-    }
+  adiciona(event) {
+    event.preventDefault();
+    this._negociacoes.adiciona(this._criaNegociacao());
+    this._mensagem.texto = "Negociação adicionada com sucesso";
+    this._mensagemView.update(this._mensagem);
+    this._limparFormulario();
+  }
 
-    _limparFormulario() {
-        this._inputData.value = ''
-        this._inputQuantidade.value = 1
-        this._inputValor.value = 0.0
-        this._inputData.focus()
-    }
-    _criaNegociacao() {
-        return new Negociacao(
-            DateConverter.paraData(this._inputData.value),
-            parseInt(this._inputQuantidade.value),
-            parseFloat(this._inputValor.value)
-        );
-    }
-    apaga() {
+  _limparFormulario() {
+    this._inputData.value = "";
+    this._inputQuantidade.value = 1;
+    this._inputValor.value = 0.0;
+    this._inputData.focus();
+  }
+  _criaNegociacao() {
+    return new Negociacao(
+      DateConverter.paraData(this._inputData.value),
+      parseInt(this._inputQuantidade.value),
+      parseFloat(this._inputValor.value)
+    );
+  }
+  apaga() {
+    this._negociacoes.esvaziar();
 
-        this._negociacoes.esvaziar()
-
-        this._mensagem.texto = 'Negociação apagada com sucesso'
-        this._mensagemView.update(this._mensagem)
-
-    }
+    this._mensagem.texto = "Negociação apagada com sucesso";
+    this._mensagemView.update(this._mensagem);
+  }
 }

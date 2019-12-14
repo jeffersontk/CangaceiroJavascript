@@ -77,24 +77,5 @@
     <script src="app/model/Mensagem.js"></script>
     <script src="app/views/MensagemView.js"></script>
     <script src="app/app.js"></script>
-    <script>
-      const negociacao = new Proxy(new Negociacao(new Date(), 2, 100), {
-        //sem ES6 get:function(...){}
-        get(target, prop, receiver) {
-          console.log(`a propriedade "${prop}" caiu na armadilha!`);
-          return target[prop];
-        },
-        set(target, prop, value, receiver) {
-          console.log(`${prop} guarda ${target[prop]}, receberá ${value}`);
-          target[prop] = value;
-
-          return target[prop] == value;
-        }
-      });
-      negociacao._quantidade = 10;
-      negociacao._valor = 100;
-      console.log(negociacao.quantidade);
-      console.log(negociacao.valor);
-    </script>
   </body>
 </html>
