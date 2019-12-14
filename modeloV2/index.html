@@ -83,6 +83,12 @@
         get(target, prop, receiver) {
           console.log(`a propriedade "${prop}" caiu na armadilha!`);
           return target[prop];
+        },
+        set(target, prop, value, receiver) {
+          console.log(`${prop} guarda ${target[prop]}, receberá ${value}`);
+          target[prop] = value;
+
+          return target[prop] == value;
         }
       });
       negociacao._quantidade = 10;
